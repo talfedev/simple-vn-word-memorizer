@@ -1,16 +1,11 @@
 <script lang="ts">
 	import { Word } from '$lib/constructors';
+	import { words } from '$lib/stores';
 
     let language: 'en'|'vn' = 'en';
 
-	const words: Word[] = [
-		new Word('hello', 'xin chao'),
-		new Word('mom', 'me'),
-		new Word('think', 'nghi')
-	];
-
 	let app = {
-		deck: words,
+		deck: $words,
 		current: 0,
 		face: 'en',
 
@@ -102,6 +97,10 @@
 	<br />
 	<button class="success" on:click={() => success()}>Got it</button>
 	<button class="failure" on:click={() => fail()}>Failed</button>
+
+	<br>
+	<br>
+	<a href="/add">add words</a>
 </div>
 
 <style lang="scss">
