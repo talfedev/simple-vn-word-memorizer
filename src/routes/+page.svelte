@@ -101,6 +101,9 @@
 	<br>
 	<br>
 	<a href="/add">add words</a>
+	<br>
+	<br>
+	<a href="/edit">edit words</a>
 </div>
 
 <style lang="scss">
