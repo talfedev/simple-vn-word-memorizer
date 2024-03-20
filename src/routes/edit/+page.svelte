@@ -32,6 +32,7 @@
 		// cleanup
 		selectedWord.en = '';
 		selectedWord.vn = '';
+		selectedWord.index = -1;
 		dialogRef?.close();
 	};
 </script>
@@ -77,10 +78,12 @@
 			English:
 			<input bind:value={selectedWord.en} type="text">
 		</label>
+		<br>
 		<label for="">
 			Vietnamese:
 			<input bind:value={selectedWord.vn} type="text">
 		</label>
+		<br><br>
 		<button on:click={() => closeModal(true)}>Edit</button>
 		<button on:click={() => closeModal()}>close</button>
 	</div>

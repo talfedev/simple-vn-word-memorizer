@@ -5,7 +5,7 @@
     let language: 'en'|'vn' = 'en';
 
 	let app = {
-		deck: $words,
+		deck: [...$words],
 		current: 0,
 		face: 'en',
 
@@ -50,12 +50,12 @@
             }
             
             if(this.face === 'en') {
-                this.face = "vn";
+                this.face = 'vn';
                 return;
             }
 
             if(this.face === 'vn') {
-                this.face = "en";
+                this.face = 'en';
                 return;
             }
         }
