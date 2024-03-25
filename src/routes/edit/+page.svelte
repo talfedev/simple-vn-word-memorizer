@@ -35,6 +35,19 @@
 		selectedWord.index = -1;
 		dialogRef?.close();
 	};
+
+	const removeWord = () => {
+		//delete word from store
+		//find it in the store
+		const index = $words.findIndex(word => word.en === selectedWord.en);
+		
+		//remove it
+		$words.splice(index,1);
+		$words = $words;
+
+		//close the modal
+		closeModal();
+	}
 </script>
 
 <main>
@@ -84,8 +97,11 @@
 			<input bind:value={selectedWord.vn} type="text">
 		</label>
 		<br><br>
-		<button on:click={() => closeModal(true)}>Edit</button>
-		<button on:click={() => closeModal()}>close</button>
+		<div class="modal-buttons">
+			<button class="good" on:click={() => closeModal(true)}>Edit</button>
+			<button on:click={() => closeModal()}>close</button>
+			<button class="bad" on:click={removeWord}>Remove</button>
+		</div>
 	</div>
 </dialog>
 
@@ -142,9 +158,30 @@
 
 	dialog {
 		margin: auto;
+		background-color: rgb(194, 224, 198);
+		padding: 10px;
 
 		&::backdrop {
 			background-color: rgba(0, 0, 0, 0.5);
+		}
+	}
+
+	.modal-buttons {
+		display: flex;
+		justify-content: space-between;
+		// padding: 10px;
+
+		button {
+			padding: 5px 10px;
+			border: 1px solid black;
+		}
+
+		.good {
+			background-color: rgb(132, 233, 132);
+		}
+
+		.bad {
+			background-color: rgb(216, 112, 112);
 		}
 	}
 </style>
