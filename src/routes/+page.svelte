@@ -24,6 +24,7 @@
 				this.deck[currentIndex] = this.deck[randomIndex];
 				this.deck[randomIndex] = temporaryValue;
 			}
+			this.deck.sort((a,b) => a.lvl - b.lvl);
 		},
 
 		next() {

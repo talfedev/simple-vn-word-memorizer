@@ -28,6 +28,7 @@
         English:
         <input bind:value={word.en} type="text">
     </label>
+    <br>
     <label for="">
         Vietnamese:
         <input bind:value={word.vn} type="text">
