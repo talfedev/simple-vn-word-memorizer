@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Word } from '$lib/constructors';
 	import { words } from '$lib/stores';
+	import { storageGet } from '$lib/utils';
 
     let language: 'en'|'vn' = 'en';
 
@@ -63,7 +64,7 @@
 	};
 
     const success = () => {
-        console.log(app.deck[app.current])
+        // console.log(app.deck[app.current])
         app.deck[app.current].levelUp();
         app.next();
         app.toggleFace(language);
@@ -71,7 +72,7 @@
     }
 
     const fail = () => {
-        console.log(app.deck[app.current])
+        // console.log(app.deck[app.current])
         app.deck[app.current].reset();
         app.next();
         app.toggleFace(language);

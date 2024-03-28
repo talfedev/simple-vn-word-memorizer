@@ -1,6 +1,8 @@
 <script lang="ts">
     import { Word } from "$lib/constructors";
     import { words } from "$lib/stores";
+    import { storageSave } from "$lib/utils";
+
     const word = {
         en: '',
         vn: '',
@@ -13,6 +15,10 @@
                 words.push(new Word(word.en, word.vn));
                 return words
             })
+
+            // save the words store to localStorage, warn if fails
+            let status = storageSave($words);
+            if(!status) console.warn("Failed to save word");
 
             // reset the add word fields
             word.en = '';

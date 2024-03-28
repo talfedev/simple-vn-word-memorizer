@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Word } from '$lib/constructors';
 	import { words } from '$lib/stores';
+	import { storageSave } from '$lib/utils';
 
 	let wordSearch = '';
 
@@ -16,6 +17,7 @@
 		index: -1
 	}
 
+	// opens modal to edit words
 	const editWord = (word: {index: number, en: string, vn: string}) => {
 		selectedWord.en = word.en;
 		selectedWord.vn = word.vn;
@@ -23,10 +25,12 @@
 		dialogRef?.showModal();
 	};
 
+	// edit the words array
 	const closeModal = (edit?: boolean) => {
 		if(edit) {
 			wordList[selectedWord.index].en = selectedWord.en;
 			wordList[selectedWord.index].vn = selectedWord.vn;
+			storageSave($words);
 		}
 		
 		// cleanup
@@ -44,6 +48,7 @@
 		//remove it
 		$words.splice(index,1);
 		$words = $words;
+		storageSave($words);
 
 		//close the modal
 		closeModal();
