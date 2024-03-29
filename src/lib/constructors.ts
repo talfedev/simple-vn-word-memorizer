@@ -3,9 +3,10 @@ export class Word {
 	vn: string;
 	lvl: number = 0;
 
-	constructor(en: string, vn: string) {
+	constructor(en: string, vn: string, lvl: number = 0) {
 		this.en = en;
 		this.vn = vn;
+		this.lvl = lvl;
 	}
 
 	levelUp = () => {

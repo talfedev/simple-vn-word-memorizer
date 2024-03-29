@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Word } from '$lib/constructors';
 	import { words } from '$lib/stores';
-	import { storageGet } from '$lib/utils';
+	import { storageSave } from '$lib/utils';
 
     let language: 'en'|'vn' = 'en';
 
@@ -26,6 +26,7 @@
 				this.deck[randomIndex] = temporaryValue;
 			}
 			this.deck.sort((a,b) => a.lvl - b.lvl);
+			console.log(this.deck);
 		},
 
 		next() {
@@ -69,6 +70,9 @@
         app.next();
         app.toggleFace(language);
         app = app;
+
+		// save word level change to localStorage
+		storageSave($words);
     }
 
     const fail = () => {
@@ -77,6 +81,9 @@
         app.next();
         app.toggleFace(language);
         app = app;
+
+		// save word level change to localStorage
+		storageSave($words);
     }
 
     const flip = () => {

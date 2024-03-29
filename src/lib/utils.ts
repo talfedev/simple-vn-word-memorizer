@@ -22,7 +22,7 @@ export function shuffle<T>(array: T[]): T[] {
 
 export function storageSave(store: Word[]): boolean {
 	const storageReadyWords = store.map(word => {
-		return {en: word.en, vn: word.vn}
+		return {en: word.en, vn: word.vn, lvl: word.lvl}
 	})
 
 	// save the store to local storage
@@ -35,12 +35,12 @@ export function storageSave(store: Word[]): boolean {
 export function storageGet(): Word[]|null {
 	// get words from localStorage
 	const storeString = localStorage.getItem("appWords") || 'null';
-	const rawStore = JSON.parse(storeString) as {en: string, vn: string}[];
+	const rawStore = JSON.parse(storeString) as {en: string, vn: string, lvl: number}[];
 	const store = rawStore.map(word => {
-		return new Word(word.en, word.vn);
+		return new Word(word.en, word.vn, word.lvl);
 	})
 
 	// log warning if can't find data
-	store? '': console.warn("Couldn't find words data in localStorage");
+	store? '': console.warn("Couldn't find words' data in localStorage");
 	return store;
 }
