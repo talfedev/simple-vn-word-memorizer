@@ -32,15 +32,26 @@ export function storageSave(store: Word[]): boolean {
 	return localStorage.getItem("appWords") && true? true:false;
 }
 
-export function storageGet(): Word[]|null {
+export function storageGet(): Word[] {
 	// get words from localStorage
 	const storeString = localStorage.getItem("appWords") || 'null';
-	const rawStore = JSON.parse(storeString) as {en: string, vn: string, lvl: number}[];
-	const store = rawStore.map(word => {
-		return new Word(word.en, word.vn, word.lvl);
-	})
 
-	// log warning if can't find data
-	store? '': console.warn("Couldn't find words' data in localStorage");
+	// parse the words list string into JSON
+	const rawStore = JSON.parse(storeString) as {en: string, vn: string, lvl: number}[]|null;
+	
+	// prepare the array (that will be returned from the function)
+	let store: Word[] = [];
+
+	// if there are words in the state instantiate them as Word objects
+	if(rawStore) {
+		store = rawStore.map(word => {
+			return new Word(word.en, word.vn, word.lvl);
+		})
+	}
+	
+	// log warning if can't find data in localStorage
+	store.length === 0? '': console.warn("Couldn't find words data in localStorage");
+	
+	// return either an array of words or an empty array
 	return store;
 }

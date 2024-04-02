@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { Word } from '$lib/constructors';
 	import { words } from '$lib/stores';
-	import { storageSave } from '$lib/utils';
+	import { storageGet, storageSave } from '$lib/utils';
 	import { fade, fly } from 'svelte/transition';
 
 	let language: 'en' | 'vn' = 'en';
 	let copiedData = false;
+	let fileInput: HTMLInputElement|null = null;
+	let textInput = '';
 
 	let app = {
 		deck: [...$words],
@@ -144,6 +146,40 @@
 		}
 	}
 
+	const handleFileUpload = async () => {
+		const messages = [
+			"This will replace your current word list and can't be reveresed",
+			"\n\nare you sure you wish to continue?"
+		];
+		const userAccepts = confirm(messages.join())
+		if(fileInput && fileInput.files && userAccepts) {
+			const file = fileInput.files[0];
+			const content = await file.text();
+			const uploadedList = JSON.parse(content);
+			if(storageSave(uploadedList)) {
+				console.log("loaded succefuly");
+				$words = storageGet();
+				app.deck = [...$words];
+				app.shuffle();
+			} else {
+				console.warn("couldn't save to localStorage");
+			}
+		}
+	}
+
+	const loadPastedData = () => {
+		const parsedList = JSON.parse(textInput);
+		if(storageSave(parsedList)) {
+			console.log("loaded succefuly");
+			textInput = '';
+			$words = storageGet();
+			app.deck = [...$words];
+			app.shuffle();
+		} else {
+			console.warn("couldn't save to localStorage");
+		}
+	}
+
 	app.shuffle();
 </script>
 
@@ -173,7 +209,17 @@
 	{/if}
 	<button on:click={copyAppData}>Copy app data</button>
 	<br><br>
-	<button on:click={downloadWordList}>Download your words</button>
+	<button on:click={downloadWordList}>Download words</button>
+	<br><br>
+	<p>Upload a words list text file:</p><br>
+	<input bind:this={fileInput} on:change={handleFileUpload} type="file" accept=".txt">
+	<br><br>- or -<br><br>
+	<div>
+		<p>Paste your list's JSON string:</p>
+		<input bind:value={textInput} type="text">
+		<!-- <br> -->
+		<button on:click={loadPastedData}>Load data</button>
+	</div>
 </div>
 
 <style lang="scss">
