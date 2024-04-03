@@ -44,13 +44,11 @@ export function storageGet(): Word[] {
 
 	// if there are words in the state instantiate them as Word objects
 	if(rawStore) {
-		store = rawStore.map(word => {
-			return new Word(word.en, word.vn, word.lvl);
-		})
+		store = rawStore.map(word => new Word(word.en, word.vn, word.lvl))
 	}
 	
 	// log warning if can't find data in localStorage
-	store.length === 0? '': console.warn("Couldn't find words data in localStorage");
+	store.length? '': console.warn("Couldn't find words data in localStorage");
 	
 	// return either an array of words or an empty array
 	return store;

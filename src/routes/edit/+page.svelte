@@ -2,6 +2,7 @@
 	import type { Word } from '$lib/constructors';
 	import { words } from '$lib/stores';
 	import { storageSave } from '$lib/utils';
+	import { base } from '$app/paths';
 
 	let wordSearch = '';
 
@@ -86,7 +87,7 @@
 	</table>
 	<br />
 	<br />
-	<a href="/">back</a>
+	<a href="{base}/">back</a>
 </main>
 
 <dialog bind:this={dialogRef}>

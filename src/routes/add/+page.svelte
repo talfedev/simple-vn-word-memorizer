@@ -2,6 +2,7 @@
     import { Word } from "$lib/constructors";
     import { words } from "$lib/stores";
     import { storageSave } from "$lib/utils";
+    import { base } from "$app/paths";
 
     const word = {
         en: '',
@@ -50,7 +51,7 @@
     {/each}
     <br>
     <br>
-    <a href="/">back</a>
+    <a href="{base}/">back</a>
 </main>
 
 <style lang="scss">

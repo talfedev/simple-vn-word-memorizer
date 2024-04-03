@@ -3,6 +3,7 @@
 	import { words } from '$lib/stores';
 	import { storageGet, storageSave } from '$lib/utils';
 	import { fade, fly } from 'svelte/transition';
+	import { base } from '$app/paths';
 
 	let language: 'en' | 'vn' = 'en';
 	let copiedData = false;
@@ -10,7 +11,7 @@
 	let textInput = '';
 
 	let app = {
-		deck: [...$words],
+		deck: $words.length? [...$words]: [new Word('empty list','add words')],
 		current: 0,
 		face: 'en',
 
@@ -198,10 +199,10 @@
 
 	<br />
 	<br />
-	<a href="/add">add words</a>
+	<a href="{base}/add">add words</a>
 	<br />
 	<br />
-	<a href="/edit">edit words</a>
+	<a href="{base}/edit">edit words</a>
 	<br />
 	<br />
 	{#if copiedData}
