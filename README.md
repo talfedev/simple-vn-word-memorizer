@@ -1,7 +1,9 @@
 # Word memorizer
 A small webapp to help with memorizing Vietnamese words.\
 May or may not improve in the future to include other languages.
-
+\
+\
+[live demo](https://talfedev.github.io/simple-vn-word-memorizer/)
 <!--
 Markdown syntax
 ----------------
