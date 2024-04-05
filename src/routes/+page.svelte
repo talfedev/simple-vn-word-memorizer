@@ -200,36 +200,37 @@
 
 <div class="header">
 	<button on:click={toggleLanguage}>Language: {language}</button>
+	<div>
+		<a href="{base}/add">Add words</a>
+		<a href="{base}/edit">Edit words</a>
+	</div>
 	<!-- <h1>Memorize!</h1> -->
 </div>
 <div class="container">
+	<button type="button" class="current-word" on:click={() => flip()}>
 	{#if app.face === 'en'}
 		<h2>{app.deck[app.current].en}</h2>
 	{:else}
 		<h2>{app.deck[app.current].vn}</h2>
 	{/if}
-	<button on:click={() => flip()}>Flip</button>
+	</button>
+	<!-- <button on:click={() => flip()}>Flip</button> -->
 	<br />
 	<br />
 	<button class="success" on:click={() => success()}>Got it</button>
 	<button class="failure" on:click={() => fail()}>Failed</button>
-
-	<br />
-	<br />
-	<a href="{base}/add">add words</a>
-	<br />
-	<br />
-	<a href="{base}/edit">edit words</a>
 	<br />
 	<br />
 	{#if copiedData}
 	<p class="copy-message" in:fly={{y: 20, opacity: 0, duration:600}} out:fade>copied data!</p>
 	{/if}
-	<button on:click={copyAppData}>Copy app data</button>
+	<p>Save your words:</p>
+	<div class="save-list">
+		<button on:click={copyAppData}>Copy to clipboard</button>
+		<button on:click={downloadWordList}>Download as text file</button>
+	</div>
 	<br><br>
-	<button on:click={downloadWordList}>Download words</button>
-	<br><br>
-	<p>Upload a words list text file:</p><br>
+	<p>Upload words-list text file:</p><br>
 	<input bind:this={fileInput} on:change={handleFileUpload} type="file" accept=".txt">
 	<br><br>- or -<br><br>
 	<div>
@@ -244,10 +245,23 @@
 	.header {
 		background-color: lightgray;
 		padding: 5px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 
 		button {
 			border: none;
 			padding: 5px 10px;
+			font-size: 0.875rem;
+		}
+
+		a {
+			background-color: rgb(243, 243, 243);
+			padding: 5px 10px;
+			border-radius: 4px;
+			text-decoration: none;
+			color: black;
+			font-size: 0.875rem;
 		}
 	}
 
@@ -279,6 +293,26 @@
 			&:active {
 				background-color: rgb(156, 156, 156);
 			}
+		}
+
+		.current-word {
+			background-color: transparent;
+			font-size: 2rem;
+			// text-transform: capitalize;
+
+			&:hover {
+				background-color: transparent;
+			}
+
+			&:active {
+				background-color: transparent;
+			}
+		}
+
+		.save-list {
+			display: flex;
+			justify-content: center;
+			gap: 20px;
 		}
 
 		.success {
