@@ -181,11 +181,28 @@
 		}
 	}
 
+	const toggleLanguage = () => {
+		if(language === 'en'){
+			language = 'vn';
+			if(app.face === 'en') app.toggleFace();
+			return;
+		}
+
+		if(language === 'vn'){
+			language = 'en';
+			if(app.face === 'vn') app.toggleFace();
+			return;
+		}
+	}
+
 	app.shuffle();
 </script>
 
+<div class="header">
+	<button on:click={toggleLanguage}>Language: {language}</button>
+	<!-- <h1>Memorize!</h1> -->
+</div>
 <div class="container">
-	<h1>Memorize!</h1>
 	{#if app.face === 'en'}
 		<h2>{app.deck[app.current].en}</h2>
 	{:else}
@@ -224,6 +241,16 @@
 </div>
 
 <style lang="scss">
+	.header {
+		background-color: lightgray;
+		padding: 5px;
+
+		button {
+			border: none;
+			padding: 5px 10px;
+		}
+	}
+
 	.container {
 		max-width: 800px;
 		margin: 0 auto;
