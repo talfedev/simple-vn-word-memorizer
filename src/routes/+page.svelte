@@ -204,7 +204,6 @@
 		<a href="{base}/add">Add words</a>
 		<a href="{base}/edit">Edit words</a>
 	</div>
-	<!-- <h1>Memorize!</h1> -->
 </div>
 <div class="container">
 	<button type="button" class="current-word" on:click={() => flip()}>
@@ -214,7 +213,6 @@
 		<h2>{app.deck[app.current].vn}</h2>
 	{/if}
 	</button>
-	<!-- <button on:click={() => flip()}>Flip</button> -->
 	<br />
 	<br />
 	<button class="success" on:click={() => success()}>Got it</button>
@@ -269,14 +267,14 @@
 		max-width: 800px;
 		margin: 0 auto;
 		text-align: center;
-		padding-top: 3rem;
+		padding-top: 2rem;
 
-		h1 {
-			color: rgb(49, 201, 80);
-			padding: 5px;
-			border-radius: 15px;
-			margin-bottom: 20px;
-		}
+		// h1 {
+		// 	color: rgb(49, 201, 80);
+		// 	padding: 5px;
+		// 	border-radius: 15px;
+		// 	margin-bottom: 20px;
+		// }
 
 		button {
 			color: black;
