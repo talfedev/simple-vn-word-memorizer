@@ -7,6 +7,8 @@ May or may not improve in the future to include other languages.
 <!--
 Markdown syntax
 ----------------
+line breaks:
+\
 
 headers:
 # h1
