@@ -1,11 +1,25 @@
-# create-svelte
+# Word memorizer
+A small webapp to help with memorizing Vietnamese words.\
+May or may not improve in the future to include other languages.
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+{::comment}
+Markdown syntax
+----------------
 
-## Creating a project
+headers:
+# h1
+## h2
+### ...
 
-If you're seeing this, you've probably already done this step. Congrats!
+links:
+[link name](https://link-address)
+or
+['link name'](https://link-address)
+or
+[link-name](https://link-address)
 
+
+code:
 ```bash
 # create a new project in the current directory
 npm create svelte@latest
@@ -13,26 +27,4 @@ npm create svelte@latest
 # create a new project in my-app
 npm create svelte@latest my-app
 ```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+{:/comment}
