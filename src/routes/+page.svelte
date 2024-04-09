@@ -201,8 +201,7 @@
 <div class="header">
 	<button on:click={toggleLanguage}>Language: {language}</button>
 	<div>
-		<a href="{base}/add">Add words</a>
-		<a href="{base}/edit">Edit words</a>
+		<a href="{base}/manage-words">Manage words</a>
 	</div>
 </div>
 <div class="container">

@@ -1,15 +1,32 @@
 <script lang="ts">
-	import type { Word } from '$lib/constructors';
+	import { Word } from '$lib/constructors';
 	import { words } from '$lib/stores';
 	import { storageSave } from '$lib/utils';
 	import { base } from '$app/paths';
 
-	let wordSearch = '';
+	const inputs = {
+		en: '',
+		vn: ''
+	}
 
 	let dialogRef: HTMLDialogElement | null = null;
 
 	$: wordList = [...$words].filter((word) => {
-		return word.en.includes(wordSearch) || word.vn.includes(wordSearch);
+		//1. when both are not empty show the matches for both
+		if(inputs.en && inputs.vn) {
+			return word.en.includes(inputs.en) || word.vn.includes(inputs.vn)
+		}
+		
+		//2. when one is not empty show its matches
+		if(inputs.en && !inputs.vn) {
+			return word.en.includes(inputs.en)
+		}
+		if(!inputs.en && inputs.vn) {
+			return word.vn.includes(inputs.vn)
+		}
+		
+		//3. when both empty show all words
+		return word.en.includes(inputs.en) || word.vn.includes(inputs.vn)
 	});
 
 	let selectedWord = {
@@ -54,13 +71,43 @@
 		//close the modal
 		closeModal();
 	}
+
+	const addWord = () => {
+        if(inputs.en && inputs.vn) {
+            // add the word object to the store
+            words.update((words) => {
+                words.push(new Word(inputs.en, inputs.vn));
+                return words
+            })
+
+            // save the words store to localStorage, warn if fails
+            let status = storageSave($words);
+            if(!status) console.warn("Failed to save word");
+
+            // reset the add word fields
+            inputs.en = '';
+            inputs.vn = '';
+        } else {
+			console.log('both English and Vietnamese must have values')
+		}
+
+    }
 </script>
 
 <main>
-	<h1>edit words</h1>
+	<h1>Manage your words</h1>
 	<br />
 	<br />
-	<input bind:value={wordSearch} placeholder="search word" type="text" />
+	<div class="inputs-and-button">
+		<div class="inputs-div">
+			<input bind:value={inputs.en} placeholder="search / add - English" type="text" />
+			<br><br>
+			<input bind:value={inputs.vn} placeholder="search / add - Vietnamese" type="text" />
+		</div>
+		<div class="add-btn-div">
+			<button on:click={addWord}>Add</button>
+		</div>
+	</div>
 	<br />
 	<br />
 	<table>
@@ -118,6 +165,32 @@
 		text-align: center;
 		padding: 0 20px;
 		padding-top: 2rem;
+	}
+
+	.inputs-and-button {
+		display:flex;
+
+		.inputs-div {
+			flex-grow: 2;
+			text-align: left;
+
+			input {
+				padding: 5px;
+				font-size: 0.9rem;
+				width: 95%;
+			}
+		}
+
+		.add-btn-div {
+			display:flex;
+			justify-content:center;
+			align-items:center;
+			flex-grow:1;
+
+			button {
+				padding: 6px 12px;
+			}
+		}
 	}
 
 	table,
