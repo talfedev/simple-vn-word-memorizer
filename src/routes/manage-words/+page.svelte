@@ -76,7 +76,7 @@
         if(inputs.en && inputs.vn) {
             // add the word object to the store
             words.update((words) => {
-                words.push(new Word(inputs.en.toLowerCase(), inputs.vn.toLowerCase()));
+                words.push(new Word(inputs.en.toLowerCase().trim(), inputs.vn.toLowerCase().trim()));
                 return words
             })
 
@@ -236,7 +236,7 @@
 	}
 
 	dialog {
-		margin: auto;
+		margin: 40% auto;
 		background-color: rgb(194, 224, 198);
 		padding: 10px;
 
