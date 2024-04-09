@@ -14,19 +14,19 @@
 	$: wordList = [...$words].filter((word) => {
 		//1. when both are not empty show the matches for both
 		if(inputs.en && inputs.vn) {
-			return word.en.includes(inputs.en) || word.vn.includes(inputs.vn)
+			return word.en.includes(inputs.en.toLowerCase()) || word.vn.includes(inputs.vn.toLowerCase())
 		}
 		
 		//2. when one is not empty show its matches
 		if(inputs.en && !inputs.vn) {
-			return word.en.includes(inputs.en)
+			return word.en.includes(inputs.en.toLowerCase())
 		}
 		if(!inputs.en && inputs.vn) {
-			return word.vn.includes(inputs.vn)
+			return word.vn.includes(inputs.vn.toLowerCase())
 		}
 		
 		//3. when both empty show all words
-		return word.en.includes(inputs.en) || word.vn.includes(inputs.vn)
+		return word.en.includes(inputs.en.toLowerCase()) || word.vn.includes(inputs.vn.toLowerCase())
 	});
 
 	let selectedWord = {
@@ -76,7 +76,7 @@
         if(inputs.en && inputs.vn) {
             // add the word object to the store
             words.update((words) => {
-                words.push(new Word(inputs.en, inputs.vn));
+                words.push(new Word(inputs.en.toLowerCase(), inputs.vn.toLowerCase()));
                 return words
             })
 
