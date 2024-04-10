@@ -170,15 +170,19 @@
 	};
 
 	const loadPastedData = () => {
-		const parsedList = JSON.parse(textInput);
-		if (storageSave(parsedList)) {
-			console.log('loaded succefuly');
-			textInput = '';
-			$words = storageGet();
-			app.deck = [...$words];
-			app.shuffle();
+		if(textInput){
+			const parsedList = JSON.parse(textInput);
+			if (storageSave(parsedList)) {
+				console.log('loaded succefuly');
+				textInput = '';
+				$words = storageGet();
+				app.deck = [...$words];
+				app.shuffle();
+			} else {
+				console.warn("couldn't save to localStorage");
+			}
 		} else {
-			console.warn("couldn't save to localStorage");
+			console.log('no data provided');
 		}
 	};
 
