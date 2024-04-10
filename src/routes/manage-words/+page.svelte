@@ -124,8 +124,8 @@
 			{#each wordList as word, index (word.en)}
 				<tr>
 					<td class="number-td">{index + 1}</td>
-					<td>{word.en}</td>
-					<td>{word.vn}</td>
+					<td class="word">{word.en}</td>
+					<td class="word">{word.vn}</td>
 					<td class="level-td">{word.lvl}</td>
 					<td class="actions-td"><button on:click={() => editWord({index, ...word})}>Edit</button></td>
 				</tr>
@@ -262,5 +262,9 @@
 		.bad {
 			background-color: rgb(216, 112, 112);
 		}
+	}
+
+	.word::first-letter {
+		text-transform: capitalize;
 	}
 </style>

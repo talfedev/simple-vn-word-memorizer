@@ -7,11 +7,12 @@
 
 	let language: 'en' | 'vn' = 'en';
 	let copiedData = false;
-	let fileInput: HTMLInputElement|null = null;
+	let fileInput: HTMLInputElement | null = null;
+	let saveModal: HTMLDialogElement | null = null;
 	let textInput = '';
 
 	let app = {
-		deck: $words.length? [...$words]: [new Word('empty list','add words')],
+		deck: $words.length ? [...$words] : [new Word('empty list', 'add words')],
 		current: 0,
 		face: 'en',
 
@@ -116,8 +117,8 @@
 		// get list as string
 		const list = localStorage.getItem('appWords');
 		if (list) {
-			const blob = new Blob([list],{type: 'text/plain'});
-			
+			const blob = new Blob([list], { type: 'text/plain' });
+
 			// create anchor element
 			const element = document.createElement('a');
 
@@ -143,22 +144,22 @@
 			// clear the address from the document
 			URL.revokeObjectURL(url);
 		} else {
-			console.warn("won't download since there are no words in the list")
+			console.warn("won't download since there are no words in the list");
 		}
-	}
+	};
 
 	const handleFileUpload = async () => {
 		const messages = [
 			"This will replace your current word list and can't be reveresed",
-			"\n\nare you sure you wish to continue?"
+			'\n\nare you sure you wish to continue?'
 		];
-		const userAccepts = confirm(messages.join())
-		if(fileInput && fileInput.files && userAccepts) {
+		const userAccepts = confirm(messages.join());
+		if (fileInput && fileInput.files && userAccepts) {
 			const file = fileInput.files[0];
 			const content = await file.text();
 			const uploadedList = JSON.parse(content);
-			if(storageSave(uploadedList)) {
-				console.log("loaded succefuly");
+			if (storageSave(uploadedList)) {
+				console.log('loaded succefuly');
 				$words = storageGet();
 				app.deck = [...$words];
 				app.shuffle();
@@ -166,12 +167,12 @@
 				console.warn("couldn't save to localStorage");
 			}
 		}
-	}
+	};
 
 	const loadPastedData = () => {
 		const parsedList = JSON.parse(textInput);
-		if(storageSave(parsedList)) {
-			console.log("loaded succefuly");
+		if (storageSave(parsedList)) {
+			console.log('loaded succefuly');
 			textInput = '';
 			$words = storageGet();
 			app.deck = [...$words];
@@ -179,21 +180,21 @@
 		} else {
 			console.warn("couldn't save to localStorage");
 		}
-	}
+	};
 
 	const toggleLanguage = () => {
-		if(language === 'en'){
+		if (language === 'en') {
 			language = 'vn';
-			if(app.face === 'en') app.toggleFace();
+			if (app.face === 'en') app.toggleFace();
 			return;
 		}
 
-		if(language === 'vn'){
+		if (language === 'vn') {
 			language = 'en';
-			if(app.face === 'vn') app.toggleFace();
+			if (app.face === 'vn') app.toggleFace();
 			return;
 		}
-	}
+	};
 
 	app.shuffle();
 </script>
@@ -201,42 +202,50 @@
 <div class="header">
 	<button on:click={toggleLanguage}>Language: {language}</button>
 	<div>
+		<button on:click={() => saveModal?.showModal()}>Save / Load</button>
 		<a href="{base}/manage-words">Manage words</a>
 	</div>
 </div>
 <div class="container">
 	<button type="button" class="current-word" on:click={() => flip()}>
-	{#if app.face === 'en'}
-		<h2>{app.deck[app.current].en}</h2>
-	{:else}
-		<h2>{app.deck[app.current].vn}</h2>
-	{/if}
+		{#if app.face === 'en'}
+			<h2 class="word">{app.deck[app.current].en}</h2>
+		{:else}
+			<h2 class="word">{app.deck[app.current].vn}</h2>
+		{/if}
 	</button>
 	<br />
 	<br />
 	<button class="success" on:click={() => success()}>Got it</button>
 	<button class="failure" on:click={() => fail()}>Failed</button>
-	<br />
-	<br />
+</div>
+
+<dialog bind:this={saveModal}>
 	{#if copiedData}
-	<p class="copy-message" in:fly={{y: 20, opacity: 0, duration:600}} out:fade>copied data!</p>
+		<p class="copy-message" in:fly={{ y: 20, opacity: 0, duration: 600 }} out:fade>copied data!</p>
 	{/if}
-	<p>Save your words:</p>
+	<h3>Save:</h3>
 	<div class="save-list">
 		<button on:click={copyAppData}>Copy to clipboard</button>
 		<button on:click={downloadWordList}>Download as text file</button>
 	</div>
-	<br><br>
-	<p>Upload words-list text file:</p><br>
-	<input bind:this={fileInput} on:change={handleFileUpload} type="file" accept=".txt">
-	<br><br>- or -<br><br>
+	<br /><br />
+	<h3>Load:</h3>
+	<br>
+	<p>Upload words-list text file:</p>
+	<br />
+	<input bind:this={fileInput} on:change={handleFileUpload} type="file" accept=".txt" />
+	<br /><br />- or -<br /><br />
 	<div>
 		<p>Paste your list's JSON string:</p>
-		<input bind:value={textInput} type="text">
+		<input bind:value={textInput} type="text" />
 		<!-- <br> -->
 		<button on:click={loadPastedData}>Load data</button>
 	</div>
-</div>
+	<div>
+		<button on:click={()=> saveModal?.close()}>Close</button>
+	</div>
+</dialog>
 
 <style lang="scss">
 	.header {
@@ -306,12 +315,6 @@
 			}
 		}
 
-		.save-list {
-			display: flex;
-			justify-content: center;
-			gap: 20px;
-		}
-
 		.success {
 			background-color: rgb(49, 201, 80);
 			&:hover {
@@ -343,5 +346,44 @@
 		padding: 5px 10px;
 		border-radius: 5px;
 		position: absolute;
+	}
+
+	dialog {
+		margin: 20% auto;
+		background-color: rgb(194, 224, 198);
+		padding: 10px;
+		text-align: center;
+		border: 1px solid black;
+
+		&::backdrop {
+			background-color: rgba(0, 0, 0, 0.5);
+		}
+
+		.save-list {
+			display: flex;
+			justify-content: center;
+			gap: 20px;
+		}
+
+		button {
+			color: black;
+			padding: 10px;
+			border: 1px solid black;
+			border-radius: 5px;
+			margin-top: 20px;
+			background-color: rgb(239, 239, 239);
+
+			&:hover {
+				background-color: rgb(227, 227, 227);
+			}
+
+			&:active {
+				background-color: rgb(156, 156, 156);
+			}
+		}
+	}
+
+	.word::first-letter {
+		text-transform: capitalize;
 	}
 </style>
