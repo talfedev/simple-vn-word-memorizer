@@ -14,7 +14,7 @@
 	let app = {
 		deck: $words.length ? [...$words] : [new Word('empty list', 'add words')],
 		current: 0,
-		face: 'en',
+		face: language as 'en'|'vn', // typescript is being ridiculous
 
 		shuffle() {
 			let currentIndex = this.deck.length;
@@ -313,6 +313,7 @@
 
 		.current-word {
 			background-color: transparent;
+			width: 100%;
 			font-size: 2rem;
 			// text-transform: capitalize;
 
