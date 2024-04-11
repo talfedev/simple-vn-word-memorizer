@@ -82,8 +82,7 @@
 	};
 
 	const fail = () => {
-		// console.log(app.deck[app.current])
-		app.deck[app.current].reset();
+		app.deck[app.current].reset(); //resets level
 		app.next();
 		app.toggleFace(language);
 		app = app;
@@ -91,6 +90,12 @@
 		// save word level change to localStorage
 		storageSave($words);
 	};
+
+	const skip = () => {
+		app.next();
+		app.toggleFace(language);
+		app = app;
+	}
 
 	const flip = () => {
 		app.toggleFace();
@@ -220,8 +225,9 @@
 	</button>
 	<br />
 	<br />
-	<button class="success" on:click={() => success()}>Got it</button>
-	<button class="failure" on:click={() => fail()}>Failed</button>
+	<button class="control-btn success" on:click={() => success()}>Got it</button>
+	<button class="control-btn skip" on:click={() => skip()}>Skip</button>
+	<button class="control-btn failure" on:click={() => fail()}>Failed</button>
 </div>
 
 <dialog bind:this={saveModal}>
@@ -319,6 +325,11 @@
 			}
 		}
 
+		.control-btn {
+			font-size: 1.2rem;
+			padding: 20px 20px;
+		}
+
 		.success {
 			background-color: rgb(49, 201, 80);
 			&:hover {
@@ -336,6 +347,16 @@
 			}
 			&:active {
 				background-color: rgb(153, 39, 39);
+			}
+		}
+
+		.skip {
+			background-color: rgb(191, 201, 49);
+			&:hover {
+				background-color: rgb(222, 219, 56);
+			}
+			&:active {
+				background-color: rgb(153, 140, 39);
 			}
 		}
 	}
