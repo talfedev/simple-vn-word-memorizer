@@ -94,8 +94,11 @@
     }
 </script>
 
-<main>
+<div class="header-div">
+	<a href="{base}/">back</a>
 	<h1>Manage your words</h1>
+</div>
+<main>
 	<br />
 	<br />
 	<div class="inputs-and-button">
@@ -134,7 +137,6 @@
 	</table>
 	<br />
 	<br />
-	<a href="{base}/">back</a>
 </main>
 
 <dialog bind:this={dialogRef}>
@@ -165,6 +167,29 @@
 		text-align: center;
 		padding: 0 20px;
 		padding-top: 2rem;
+	}
+
+	.header-div {
+		display: flex;
+		background-color: rgb(119, 207, 114);
+		padding: 10px;
+		gap: 20px;
+
+		h1 {
+			font-size: 1.5rem;
+		}
+
+		a {
+			text-decoration: none;
+			background-color: lightgray;
+			color: black;
+			padding: 5px 10px;
+			border: none;
+			border-radius: 4px;
+			// position: absolute;
+			// top: 10px;
+			// left:10px;
+		}
 	}
 
 	.inputs-and-button {
