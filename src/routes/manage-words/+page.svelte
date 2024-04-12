@@ -261,7 +261,7 @@
 	}
 
 	dialog {
-		margin: 40% auto;
+		margin: 150px auto;
 		background-color: rgb(194, 224, 198);
 		padding: 10px;
 

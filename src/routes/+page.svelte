@@ -225,9 +225,13 @@
 	</button>
 	<br />
 	<br />
-	<button class="control-btn success" on:click={() => success()}>Got it</button>
+	{#if app.face !== language}
+		<button class="control-btn success" on:click={() => success()}>Got it</button>
+	{/if}
 	<button class="control-btn skip" on:click={() => skip()}>Skip</button>
-	<button class="control-btn failure" on:click={() => fail()}>Failed</button>
+	{#if app.face !== language}
+		<button class="control-btn failure" on:click={() => fail()}>Failed</button>
+	{/if}
 </div>
 
 <dialog bind:this={saveModal}>
@@ -375,7 +379,7 @@
 	}
 
 	dialog {
-		margin: 20% auto;
+		margin: 80px auto;
 		background-color: rgb(194, 224, 198);
 		padding: 10px;
 		text-align: center;
