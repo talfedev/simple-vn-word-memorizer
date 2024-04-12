@@ -171,7 +171,7 @@
 
 	.header-div {
 		display: flex;
-		background-color: rgb(119, 207, 114);
+		background-color: rgb(194, 231, 208);
 		padding: 10px;
 		gap: 20px;
 
@@ -181,10 +181,10 @@
 
 		a {
 			text-decoration: none;
-			background-color: lightgray;
+			background-color: rgb(239, 239, 239);
 			color: black;
 			padding: 5px 10px;
-			border: none;
+			border: 1px solid rgb(132, 191, 160);
 			border-radius: 4px;
 			// position: absolute;
 			// top: 10px;
@@ -232,7 +232,7 @@
 	}
 
 	tr {
-		background-color: #b9d1b9;
+		background-color: #c2e7d0;;
 	}
 
 	td,
