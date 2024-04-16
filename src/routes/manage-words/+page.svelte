@@ -186,9 +186,6 @@
 			padding: 5px 10px;
 			border: 1px solid rgb(132, 191, 160);
 			border-radius: 4px;
-			// position: absolute;
-			// top: 10px;
-			// left:10px;
 		}
 	}
 

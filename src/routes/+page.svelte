@@ -156,33 +156,68 @@
 	const handleFileUpload = async () => {
 		const messages = [
 			"This will replace your current word list and can't be reveresed",
-			'\n\nare you sure you wish to continue?'
+			'\n\nDo you wish to continue?'
 		];
-		const userAccepts = confirm(messages.join());
+		const add = confirm("Would you like these words to be added to the current list?");
+		let userAccepts:boolean = add;
+		if(!add){
+			userAccepts = confirm(messages.join());
+		}
 		if (fileInput && fileInput.files && userAccepts) {
 			const file = fileInput.files[0];
 			const content = await file.text();
-			const uploadedList = JSON.parse(content);
-			if (storageSave(uploadedList)) {
+
+			let listToLoad: Word[];
+			try {
+				listToLoad = JSON.parse(content);
+			} catch {
+				console.warn("Failed to parse JSON in the file");
+				alert("Something is wrong with the JSON in the file you provided.")
+				return;
+			}
+
+			if(add) {
+				listToLoad = $words.concat(listToLoad);
+			}
+
+			if (storageSave(listToLoad)) {
 				console.log('loaded succefuly');
 				$words = storageGet();
 				app.deck = [...$words];
 				app.shuffle();
+				saveModal?.close();
 			} else {
 				console.warn("couldn't save to localStorage");
 			}
 		}
 	};
 
-	const loadPastedData = () => {
+	const loadPastedData = (add: boolean = true) => {
 		if(textInput){
-			const parsedList = JSON.parse(textInput);
-			if (storageSave(parsedList)) {
+			let listToLoad: Word[];
+			
+			// parse user pasted list
+			try {
+				listToLoad = JSON.parse(textInput);
+			} catch {
+				console.warn("Error trying to parse JSON")
+				alert("Something wrong with the JSON string you provided");
+				return;
+			}
+			
+			// add user list to existing list
+			if (add) {
+				listToLoad = $words.concat(listToLoad);
+			}
+
+			// save to storage
+			if (storageSave(listToLoad)) {
 				console.log('loaded succefuly');
 				textInput = '';
 				$words = storageGet();
 				app.deck = [...$words];
 				app.shuffle();
+				saveModal?.close();
 			} else {
 				console.warn("couldn't save to localStorage");
 			}
@@ -253,8 +288,9 @@
 	<div>
 		<p>Paste your list's JSON string:</p>
 		<input bind:value={textInput} type="text" />
-		<!-- <br> -->
-		<button on:click={loadPastedData}>Load data</button>
+		<br>
+		<button on:click={() => loadPastedData()}>Add data</button>
+		<button on:click={() => loadPastedData(false)}>Replace data</button>
 	</div>
 	<div>
 		<button on:click={()=> saveModal?.close()}>Close</button>

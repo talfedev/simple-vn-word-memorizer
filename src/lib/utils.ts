@@ -21,6 +21,7 @@ export function shuffle<T>(array: T[]): T[] {
 }
 
 export function storageSave(store: Word[]): boolean {
+	// turn word objects to simple objects (with no functions)
 	const storageReadyWords = store.map(word => {
 		return {en: word.en, vn: word.vn, lvl: word.lvl}
 	})
