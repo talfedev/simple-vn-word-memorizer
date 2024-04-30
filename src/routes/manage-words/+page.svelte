@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Word } from '$lib/constructors';
 	import { words } from '$lib/stores';
-	import { storageSave } from '$lib/utils';
+	import { generateId, storageSave } from '$lib/utils';
 	import { base } from '$app/paths';
 
 	const inputs = {
@@ -11,61 +11,63 @@
 
 	let dialogRef: HTMLDialogElement | null = null;
 
-	$: wordList = [...$words].filter((word) => {
+	// runs whenever the the input elements change their value
+	$: wordList = [...Object.values($words)].filter((word) => {
 		//1. when both are not empty show the matches for both
 		if(inputs.en && inputs.vn) {
-			return word.en.includes(inputs.en.toLowerCase()) || word.vn.includes(inputs.vn.toLowerCase())
+			return word.en.toLowerCase().includes(inputs.en.toLowerCase()) || word.vn.includes(inputs.vn.toLowerCase())
 		}
 		
 		//2. when one is not empty show its matches
 		if(inputs.en && !inputs.vn) {
-			return word.en.includes(inputs.en.toLowerCase())
+			return word.en.toLowerCase().includes(inputs.en.toLowerCase())
 		}
 		if(!inputs.en && inputs.vn) {
-			return word.vn.includes(inputs.vn.toLowerCase())
+			return word.vn.toLowerCase().includes(inputs.vn.toLowerCase())
 		}
 		
 		//3. when both empty show all words
-		return word.en.includes(inputs.en.toLowerCase()) || word.vn.includes(inputs.vn.toLowerCase())
+		return true
 	});
 
 	let selectedWord = {
 		en: '',
 		vn: '',
+		id: '',
 		index: -1
 	}
 
 	// opens modal to edit words
-	const editWord = (word: {index: number, en: string, vn: string}) => {
+	const editWord = (word: {index: number, en: string, vn: string, id: string}) => {
 		selectedWord.en = word.en;
 		selectedWord.vn = word.vn;
+		selectedWord.id = word.id;
 		selectedWord.index = word.index;
 		dialogRef?.showModal();
 	};
 
-	// edit the words array
+	// edit the words list
 	const closeModal = (edit?: boolean) => {
 		if(edit) {
-			wordList[selectedWord.index].en = selectedWord.en;
-			wordList[selectedWord.index].vn = selectedWord.vn;
+			wordList[selectedWord.index].en = selectedWord.en.toLowerCase().trim();
+			wordList[selectedWord.index].vn = selectedWord.vn.toLowerCase().trim();
 			storageSave($words);
 		}
 		
 		// cleanup
 		selectedWord.en = '';
 		selectedWord.vn = '';
+		selectedWord.id = '';
 		selectedWord.index = -1;
 		dialogRef?.close();
 	};
 
-	const removeWord = () => {
-		//delete word from store
-		//find it in the store
-		const index = $words.findIndex(word => word.en === selectedWord.en);
-		
-		//remove it
-		$words.splice(index,1);
+	const removeWord = (id: string) => {
+		//delete word from state's words list
+		delete $words[id];
 		$words = $words;
+
+		//save the updated state's words list to storage
 		storageSave($words);
 
 		//close the modal
@@ -74,13 +76,14 @@
 
 	const addWord = () => {
         if(inputs.en && inputs.vn) {
-            // add the word object to the store
+            // add a new word object to the state's words list
+			const newWord = new Word(inputs.en.toLowerCase().trim(), inputs.vn.toLowerCase().trim(), 0, generateId($words))
             words.update((words) => {
-                words.push(new Word(inputs.en.toLowerCase().trim(), inputs.vn.toLowerCase().trim()));
+                words[newWord.id] = newWord;
                 return words
             })
 
-            // save the words store to localStorage, warn if fails
+            // save the updated state's words list to localStorage, warn if fails
             let status = storageSave($words);
             if(!status) console.warn("Failed to save word");
 
@@ -124,7 +127,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each wordList as word, index (word.en)}
+			{#each wordList as word, index (word.id)}
 				<tr>
 					<td class="number-td">{index + 1}</td>
 					<td class="word">{word.en}</td>
@@ -155,7 +158,7 @@
 		<div class="modal-buttons">
 			<button class="good" on:click={() => closeModal(true)}>Edit</button>
 			<button on:click={() => closeModal()}>close</button>
-			<button class="bad" on:click={removeWord}>Remove</button>
+			<button class="bad" on:click={() => removeWord(selectedWord.id)}>Remove</button>
 		</div>
 	</div>
 </dialog>

@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { Word } from '$lib/constructors';
 	import { words } from '$lib/stores';
-	import { storageGet, storageSave } from '$lib/utils';
+	import { storageGet, storageSave, isJsonShapeCorrect } from '$lib/utils';
 	import { fade, fly } from 'svelte/transition';
 	import { base } from '$app/paths';
+	import type { WordList } from "$lib/types";
 
 	let language: 'en' | 'vn' = 'en';
 	let copiedData = false;
@@ -12,7 +13,7 @@
 	let textInput = '';
 
 	let app = {
-		deck: $words.length ? [...$words] : [new Word('empty list', 'add words')],
+		deck: Object.values($words).length ? [...Object.values($words)] : [new Word('empty list', 'add words', 0, "default-word-id")],
 		current: 0,
 		face: language as 'en'|'vn', // typescript is being ridiculous
 
@@ -158,6 +159,8 @@
 			"This will replace your current word list and can't be reveresed",
 			'\n\nDo you wish to continue?'
 		];
+
+		// ask user if he wants to add words to current list
 		const add = confirm("Would you like these words to be added to the current list?");
 		let userAccepts:boolean = add;
 		if(!add){
@@ -167,23 +170,37 @@
 			const file = fileInput.files[0];
 			const content = await file.text();
 
-			let listToLoad: Word[];
+			let listToLoad: WordList;
+
+			// check that the JSON is valid
 			try {
 				listToLoad = JSON.parse(content);
 			} catch {
 				console.warn("Failed to parse JSON in the file");
-				alert("Something is wrong with the JSON in the file you provided.")
+				alert("Something is wrong with the JSON in the file you provided.");
 				return;
 			}
 
+			// verify that user loaded JSON's shape is correct
+			if(!isJsonShapeCorrect(listToLoad)) {
+				console.warn("The JSON in the file does not fit expected structure");
+				return;
+			}
+
+			// lower case and trim user loaded words
+			for(const word in listToLoad) {
+				listToLoad[word].en = listToLoad[word].en.toLowerCase().trim();
+				listToLoad[word].vn = listToLoad[word].vn.toLowerCase().trim();
+			}
+
 			if(add) {
-				listToLoad = $words.concat(listToLoad);
+				listToLoad = {...$words, ...listToLoad};
 			}
 
 			if (storageSave(listToLoad)) {
-				console.log('loaded succefuly');
+				console.log('saved successfuly');
 				$words = storageGet();
-				app.deck = [...$words];
+				app.deck = [...Object.values($words)];
 				app.shuffle();
 				saveModal?.close();
 			} else {
@@ -194,7 +211,7 @@
 
 	const loadPastedData = (add: boolean = true) => {
 		if(textInput){
-			let listToLoad: Word[];
+			let listToLoad: WordList;
 			
 			// parse user pasted list
 			try {
@@ -204,18 +221,30 @@
 				alert("Something wrong with the JSON string you provided");
 				return;
 			}
+
+			// verify that user loaded JSON's shape is correct
+			if(!isJsonShapeCorrect(listToLoad)) {
+				console.warn("The JSON text provided does not fit expected structure");
+				return;
+			}
+
+			// lower case and trim user loaded words
+			for(const word in listToLoad) {
+				listToLoad[word].en = listToLoad[word].en.toLowerCase().trim();
+				listToLoad[word].vn = listToLoad[word].vn.toLowerCase().trim();
+			}
 			
 			// add user list to existing list
 			if (add) {
-				listToLoad = $words.concat(listToLoad);
+				listToLoad = {...$words, ...listToLoad};
 			}
 
 			// save to storage
 			if (storageSave(listToLoad)) {
-				console.log('loaded succefuly');
+				console.log('saved succefuly');
 				textInput = '';
 				$words = storageGet();
-				app.deck = [...$words];
+				app.deck = [...Object.values($words)];
 				app.shuffle();
 				saveModal?.close();
 			} else {
